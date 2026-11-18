@@ -35,7 +35,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtTipo_Equipos = new javax.swing.JLabel();
         txtDescripcion_Equipos = new javax.swing.JLabel();
         cmbTipo_Equipos2 = new javax.swing.JComboBox<>();
-        txtDescipcion_Equipos2 = new javax.swing.JTextField();
+        txtDescripcion_Equipos2 = new javax.swing.JTextField();
         btnRegistrar_Equipos = new javax.swing.JButton();
         Usuarios_2 = new javax.swing.JPanel();
         Préstamos_3 = new javax.swing.JPanel();
@@ -66,12 +66,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                             .addComponent(txtCodigo_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtTipo_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtDescripcion_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
-                        .addGap(27, 27, 27)
-                        .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigo_Equipos2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbTipo_Equipos2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDescipcion_Equipos2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(352, Short.MAX_VALUE))
+                        .addGap(50, 50, 50)
+                        .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCodigo_Equipos2)
+                            .addComponent(cmbTipo_Equipos2, 0, 107, Short.MAX_VALUE)
+                            .addComponent(txtDescripcion_Equipos2))))
+                .addContainerGap(316, Short.MAX_VALUE))
         );
         Equipos_1Layout.setVerticalGroup(
             Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,7 +87,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDescripcion_Equipos)
-                    .addComponent(txtDescipcion_Equipos2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDescripcion_Equipos2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnRegistrar_Equipos)
                 .addContainerGap(229, Short.MAX_VALUE))
@@ -141,7 +141,36 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void btnRegistrar_EquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrar_EquiposActionPerformed
         String codigo = txtCodigo_Equipos2.getText().trim();
         String tipo = cmbTipo_Equipos2.getSelectedItem().toString();
-        String descripcion = txtDescipcion_Equipos2.getText().trim();
+        String descripcion = txtDescripcion_Equipos2.getText().trim();
+
+        if (codigo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo 'Código' está vacío. Ingrese un código (ej. LAP-01).", "Falta el código", JOptionPane.WARNING_MESSAGE);
+            txtCodigo_Equipos2.requestFocus();
+            return;
+        }
+        if (codigo.contains(",")) {
+            JOptionPane.showMessageDialog(this, "El campo 'Código' no puede contener comas (,).", "Formato inválido", JOptionPane.WARNING_MESSAGE);
+            txtCodigo_Equipos2.requestFocus();
+            return;
+        }
+
+        if (descripcion.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo 'Descripción' está vacío. Ingrese una descripción del equipo.", "Falta la descripción", JOptionPane.WARNING_MESSAGE);
+            txtDescripcion_Equipos2.requestFocus();
+            return;
+        }
+        if (descripcion.contains(",")) {
+            JOptionPane.showMessageDialog(this, "El campo 'Descripción' no puede contener comas (,).", "Formato inválido", JOptionPane.WARNING_MESSAGE);
+            txtDescripcion_Equipos2.requestFocus();
+            return;
+        }
+
+        for (Equipo eq : listaEquipos) {
+            if (eq.getCodigo().equalsIgnoreCase(codigo)) {
+                JOptionPane.showMessageDialog(this, "El código '" + codigo + "' ya existe. Ingrese uno diferente.", "Código repetido", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
 
         Equipo nuevo = new Equipo(codigo, tipo, descripcion);
         listaEquipos.add(nuevo);
@@ -149,7 +178,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog(this, "Equipo registrado con estado Disponible.");
         txtCodigo_Equipos2.setText("");
-        txtDescipcion_Equipos2.setText("");
+        txtDescripcion_Equipos2.setText("");
     }//GEN-LAST:event_btnRegistrar_EquiposActionPerformed
 
     /**
@@ -186,8 +215,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel txtCodigo_Equipos;
     private javax.swing.JTextField txtCodigo_Equipos2;
-    private javax.swing.JTextField txtDescipcion_Equipos2;
     private javax.swing.JLabel txtDescripcion_Equipos;
+    private javax.swing.JTextField txtDescripcion_Equipos2;
     private javax.swing.JLabel txtTipo_Equipos;
     // End of variables declaration//GEN-END:variables
 }
