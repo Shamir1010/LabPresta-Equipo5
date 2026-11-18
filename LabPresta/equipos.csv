@@ -1,6 +1,8 @@
 codigo,tipo,descripcion,estado
-12,Otro,21,Disponible
+12,Otro,21,En mantenimiento
 15,Proyector,25,Disponible
 51,Laptop,23,Disponible
 2,Laptop,26,Disponible
 6,Kit Arduino,0,Disponible
+60,Laptop,30,Disponible
+1,Otro,30,Disponible

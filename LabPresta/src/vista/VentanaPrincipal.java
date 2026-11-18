@@ -4,10 +4,13 @@ import datos.GestorEquipos;
 import java.util.List;
 import modelo.Equipo;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 
 public class VentanaPrincipal extends javax.swing.JFrame {
     
     private List<Equipo> listaEquipos;
+    private DefaultTableModel modeloTablaEquipos;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
 
@@ -17,6 +20,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
         listaEquipos = GestorEquipos.cargarEquipos();
+        modeloTablaEquipos = new DefaultTableModel(new String[]{"Código", "Tipo", "Descripción", "Estado"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblEquipos_Equipos.setModel(modeloTablaEquipos);
+        actualizarTablaEquipos();
+    }
+    
+    private void actualizarTablaEquipos() {
+        modeloTablaEquipos.setRowCount(0);
+        for (Equipo eq : listaEquipos) {
+            modeloTablaEquipos.addRow(new Object[]{
+                eq.getCodigo(),
+                eq.getTipo(),
+                eq.getDescripcion(),
+                eq.getEstado()
+            });
+        }
     }
 
     /**
@@ -37,6 +60,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cmbTipo_Equipos2 = new javax.swing.JComboBox<>();
         txtDescripcion_Equipos2 = new javax.swing.JTextField();
         btnRegistrar_Equipos = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEquipos_Equipos = new javax.swing.JTable();
+        btnMarcar_Equipos3 = new javax.swing.JButton();
+        btnDevolver_Equipos4 = new javax.swing.JButton();
         Usuarios_2 = new javax.swing.JPanel();
         Préstamos_3 = new javax.swing.JPanel();
 
@@ -53,6 +80,25 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnRegistrar_Equipos.setText("Registrar Equipo");
         btnRegistrar_Equipos.addActionListener(this::btnRegistrar_EquiposActionPerformed);
 
+        tblEquipos_Equipos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblEquipos_Equipos);
+
+        btnMarcar_Equipos3.setText("Marcar en Mantenimiento");
+        btnMarcar_Equipos3.addActionListener(this::btnMarcar_Equipos3ActionPerformed);
+
+        btnDevolver_Equipos4.setText("Devolver a Disponible");
+        btnDevolver_Equipos4.addActionListener(this::btnDevolver_Equipos4ActionPerformed);
+
         javax.swing.GroupLayout Equipos_1Layout = new javax.swing.GroupLayout(Equipos_1);
         Equipos_1.setLayout(Equipos_1Layout);
         Equipos_1Layout.setHorizontalGroup(
@@ -60,18 +106,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(Equipos_1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRegistrar_Equipos)
                     .addGroup(Equipos_1Layout.createSequentialGroup()
-                        .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCodigo_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTipo_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDescripcion_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
-                        .addGap(50, 50, 50)
-                        .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCodigo_Equipos2)
-                            .addComponent(cmbTipo_Equipos2, 0, 107, Short.MAX_VALUE)
-                            .addComponent(txtDescripcion_Equipos2))))
-                .addContainerGap(316, Short.MAX_VALUE))
+                        .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRegistrar_Equipos)
+                            .addGroup(Equipos_1Layout.createSequentialGroup()
+                                .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtCodigo_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtTipo_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtDescripcion_Equipos, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+                                .addGap(50, 50, 50)
+                                .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtCodigo_Equipos2)
+                                    .addComponent(cmbTipo_Equipos2, 0, 107, Short.MAX_VALUE)
+                                    .addComponent(txtDescripcion_Equipos2))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(Equipos_1Layout.createSequentialGroup()
+                        .addComponent(btnMarcar_Equipos3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(btnDevolver_Equipos4)
+                        .addGap(172, 172, 172))))
         );
         Equipos_1Layout.setVerticalGroup(
             Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,7 +144,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(txtDescripcion_Equipos2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnRegistrar_Equipos)
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addGroup(Equipos_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnMarcar_Equipos3)
+                    .addComponent(btnDevolver_Equipos4))
+                .addGap(121, 121, 121))
         );
 
         jTabbedPane1.addTab("Equipos", Equipos_1);
@@ -99,11 +159,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Usuarios_2.setLayout(Usuarios_2Layout);
         Usuarios_2Layout.setHorizontalGroup(
             Usuarios_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 562, Short.MAX_VALUE)
+            .addGap(0, 519, Short.MAX_VALUE)
         );
         Usuarios_2Layout.setVerticalGroup(
             Usuarios_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 626, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Usuarios", Usuarios_2);
@@ -112,11 +172,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Préstamos_3.setLayout(Préstamos_3Layout);
         Préstamos_3Layout.setHorizontalGroup(
             Préstamos_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 562, Short.MAX_VALUE)
+            .addGap(0, 519, Short.MAX_VALUE)
         );
         Préstamos_3Layout.setVerticalGroup(
             Préstamos_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 626, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Préstamos", Préstamos_3);
@@ -143,43 +203,83 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         String tipo = cmbTipo_Equipos2.getSelectedItem().toString();
         String descripcion = txtDescripcion_Equipos2.getText().trim();
 
+        StringBuilder errores = new StringBuilder();
+
         if (codigo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo 'Código' está vacío. Ingrese un código (ej. LAP-01).", "Falta el código", JOptionPane.WARNING_MESSAGE);
-            txtCodigo_Equipos2.requestFocus();
-            return;
-        }
-        if (codigo.contains(",")) {
-            JOptionPane.showMessageDialog(this, "El campo 'Código' no puede contener comas (,).", "Formato inválido", JOptionPane.WARNING_MESSAGE);
-            txtCodigo_Equipos2.requestFocus();
-            return;
+            errores.append("- El campo 'Código' está vacío.\n");
+        } else {
+            if (codigo.contains(",")) {
+                errores.append("- El campo 'Código' no puede contener comas (,).\n");
+            }
+            for (Equipo eq : listaEquipos) {
+                if (eq.getCodigo().equalsIgnoreCase(codigo)) {
+                    errores.append("- El código '").append(codigo).append("' ya está registrado.\n");
+                    break;
+                }
+            }
         }
 
         if (descripcion.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El campo 'Descripción' está vacío. Ingrese una descripción del equipo.", "Falta la descripción", JOptionPane.WARNING_MESSAGE);
-            txtDescripcion_Equipos2.requestFocus();
-            return;
-        }
-        if (descripcion.contains(",")) {
-            JOptionPane.showMessageDialog(this, "El campo 'Descripción' no puede contener comas (,).", "Formato inválido", JOptionPane.WARNING_MESSAGE);
-            txtDescripcion_Equipos2.requestFocus();
-            return;
+            errores.append("- El campo 'Descripción' está vacío.\n");
+        } else if (descripcion.contains(",")) {
+            errores.append("- El campo 'Descripción' no puede contener comas (,).\n");
         }
 
-        for (Equipo eq : listaEquipos) {
-            if (eq.getCodigo().equalsIgnoreCase(codigo)) {
-                JOptionPane.showMessageDialog(this, "El código '" + codigo + "' ya existe. Ingrese uno diferente.", "Código repetido", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        if (errores.length() > 0) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Corrija los siguientes errores antes de registrar:\n\n" + errores.toString(),
+                    "Errores de validación",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
         }
 
         Equipo nuevo = new Equipo(codigo, tipo, descripcion);
         listaEquipos.add(nuevo);
         GestorEquipos.guardarEquipos(listaEquipos);
+        actualizarTablaEquipos();
 
         JOptionPane.showMessageDialog(this, "Equipo registrado con estado Disponible.");
         txtCodigo_Equipos2.setText("");
         txtDescripcion_Equipos2.setText("");
     }//GEN-LAST:event_btnRegistrar_EquiposActionPerformed
+
+    private void btnMarcar_Equipos3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcar_Equipos3ActionPerformed
+        int fila = tblEquipos_Equipos.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un equipo de la tabla primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Equipo eq = listaEquipos.get(fila);
+        if (eq.getEstado().equals("Prestado")) {
+            JOptionPane.showMessageDialog(this, "No se puede enviar a mantenimiento un equipo que está Prestado.", "Acción no permitida", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        eq.setEstado("En mantenimiento");
+        GestorEquipos.guardarEquipos(listaEquipos);
+        actualizarTablaEquipos();
+    }//GEN-LAST:event_btnMarcar_Equipos3ActionPerformed
+
+    private void btnDevolver_Equipos4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolver_Equipos4ActionPerformed
+        int fila = tblEquipos_Equipos.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un equipo de la tabla primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Equipo eq = listaEquipos.get(fila);
+        if (eq.getEstado().equals("Prestado")) {
+            JOptionPane.showMessageDialog(this, "Este equipo está Prestado. Debe devolverse desde la pestaña de Préstamos.", "Acción no permitida", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        eq.setEstado("Disponible");
+        GestorEquipos.guardarEquipos(listaEquipos);
+        actualizarTablaEquipos();
+    }//GEN-LAST:event_btnDevolver_Equipos4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,9 +310,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel Equipos_1;
     private javax.swing.JPanel Préstamos_3;
     private javax.swing.JPanel Usuarios_2;
+    private javax.swing.JButton btnDevolver_Equipos4;
+    private javax.swing.JButton btnMarcar_Equipos3;
     private javax.swing.JButton btnRegistrar_Equipos;
     private javax.swing.JComboBox<String> cmbTipo_Equipos2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable tblEquipos_Equipos;
     private javax.swing.JLabel txtCodigo_Equipos;
     private javax.swing.JTextField txtCodigo_Equipos2;
     private javax.swing.JLabel txtDescripcion_Equipos;
