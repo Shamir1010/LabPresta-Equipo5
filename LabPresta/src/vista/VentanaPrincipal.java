@@ -19,6 +19,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
+        jTabbedPane1.setComponentAt(1, new PanelUsuarios());
         listaEquipos = GestorEquipos.cargarEquipos();
         modeloTablaEquipos = new DefaultTableModel(new String[]{"Código", "Tipo", "Descripción", "Estado"}, 0) {
             @Override
