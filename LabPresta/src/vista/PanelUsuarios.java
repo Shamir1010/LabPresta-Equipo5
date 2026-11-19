@@ -27,6 +27,7 @@ public class PanelUsuarios extends JPanel {
     private JTextField txtNombre;
     private JTextField txtTelefono;
     private JComboBox<String> cmbTipo;
+    private JTextField txtBuscar;
 
     public PanelUsuarios() {
         listaUsuarios = GestorUsuarios.cargarUsuarios();
@@ -69,7 +70,23 @@ public class PanelUsuarios extends JPanel {
         tabla = new JTable(modeloTabla);
 
         add(formulario, BorderLayout.NORTH);
-        add(new JScrollPane(tabla), BorderLayout.CENTER);
+                txtBuscar = new JTextField(20);
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                actualizarTabla();
+            }
+        });
+        JPanel busqueda = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 8));
+        busqueda.setOpaque(false);
+        busqueda.add(new JLabel("Buscar por cédula o nombre:"));
+        busqueda.add(txtBuscar);
+
+        JPanel centro = new JPanel(new BorderLayout());
+        centro.setOpaque(false);
+        centro.add(busqueda, BorderLayout.NORTH);
+        centro.add(new JScrollPane(tabla), BorderLayout.CENTER);
+        add(centro, BorderLayout.CENTER);
     }
 
     private void agregarFila(JPanel panel, GridBagConstraints c, int fila, String etiqueta, java.awt.Component campo) {
@@ -81,14 +98,19 @@ public class PanelUsuarios extends JPanel {
         panel.add(campo, c);
     }
 
-    private void actualizarTabla() {
+        private void actualizarTabla() {
+        String texto = txtBuscar.getText().trim().toLowerCase();
         modeloTabla.setRowCount(0);
         for (Usuario u : listaUsuarios) {
-            modeloTabla.addRow(new Object[]{
-                u.getCedula(), u.getNombre(), u.getTipo(), u.getTelefono()
-            });
+            if (texto.isEmpty()
+                    || u.getCedula().toLowerCase().contains(texto)
+                    || u.getNombre().toLowerCase().contains(texto)) {
+                modeloTabla.addRow(new Object[]{
+                    u.getCedula(), u.getNombre(), u.getTipo(), u.getTelefono()
+                });
+            }
         }
-    }
+      }
 
         private String validar(String cedula, String nombre, String tipo, String telefono) {
         StringBuilder errores = new StringBuilder();
@@ -142,7 +164,9 @@ public class PanelUsuarios extends JPanel {
 
         listaUsuarios.add(new Usuario(cedula, nombre, tipo, telefono));
         GestorUsuarios.guardarUsuarios(listaUsuarios);
+        txtBuscar.setText("");
         actualizarTabla();
+        
 
         JOptionPane.showMessageDialog(this, "Usuario registrado correctamente.");
         txtCedula.setText("");
