@@ -3,7 +3,7 @@ package modelo;
 public class Usuario {
     private String cedula;
     private String nombre;
-    private String tipo;      // "Estudiante" o "Docente"
+    private String tipo;      
     private String telefono;
 
     public Usuario(String cedula, String nombre, String tipo, String telefono) {
