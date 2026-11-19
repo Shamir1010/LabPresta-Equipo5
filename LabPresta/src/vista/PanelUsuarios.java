@@ -90,9 +90,40 @@ public class PanelUsuarios extends JPanel {
         }
     }
 
-    // Las validaciones se agregan en la tarjeta C2-4.
-    private String validar(String cedula, String nombre, String tipo, String telefono) {
-        return "";
+        private String validar(String cedula, String nombre, String tipo, String telefono) {
+        StringBuilder errores = new StringBuilder();
+
+        if (cedula.isEmpty()) {
+            errores.append("- El campo 'Cédula' está vacío.\n");
+        } else {
+            if (!cedula.matches("\\d+")) {
+                errores.append("- La cédula solo puede contener números.\n");
+            }
+            for (Usuario u : listaUsuarios) {
+                if (u.getCedula().equals(cedula)) {
+                    errores.append("- La cédula '").append(cedula).append("' ya está registrada.\n");
+                    break;
+                }
+            }
+        }
+
+        if (nombre.isEmpty()) {
+            errores.append("- El campo 'Nombre completo' está vacío.\n");
+        } else if (nombre.contains(",")) {
+            errores.append("- El nombre no puede contener comas (,).\n");
+        }
+
+        if (tipo.isEmpty()) {
+            errores.append("- Debe seleccionar el tipo de usuario (Estudiante o Docente).\n");
+        }
+
+        if (telefono.isEmpty()) {
+            errores.append("- El campo 'Teléfono' está vacío.\n");
+        } else if (!telefono.matches("\\d+")) {
+            errores.append("- El teléfono solo puede contener números.\n");
+        }
+
+        return errores.toString();
     }
 
     private void registrarUsuario() {
