@@ -20,6 +20,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
         jTabbedPane1.setComponentAt(1, new PanelUsuarios());
+        PanelPrestamos panelPrestamos = new PanelPrestamos(() -> {
+            listaEquipos = GestorEquipos.cargarEquipos();
+            actualizarTablaEquipos();
+        });
+        jTabbedPane1.setComponentAt(2, panelPrestamos);
+
+        jTabbedPane1.addChangeListener(e -> {
+            if (jTabbedPane1.getSelectedIndex() == 2) {
+                panelPrestamos.recargarDatos();
+            }
+        });
         listaEquipos = GestorEquipos.cargarEquipos();
         modeloTablaEquipos = new DefaultTableModel(new String[]{"Código", "Tipo", "Descripción", "Estado"}, 0) {
             @Override
@@ -211,6 +222,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrar_EquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrar_EquiposActionPerformed
+        listaEquipos = GestorEquipos.cargarEquipos();
         String codigo = txtCodigo_Equipos2.getText().trim();
         String tipo = cmbTipo_Equipos2.getSelectedItem().toString();
         String descripcion = txtDescripcion_Equipos2.getText().trim();
@@ -258,6 +270,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrar_EquiposActionPerformed
 
     private void btnMarcar_Equipos3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcar_Equipos3ActionPerformed
+        listaEquipos = GestorEquipos.cargarEquipos();
         int fila = tblEquipos_Equipos.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un equipo de la tabla primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -276,6 +289,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMarcar_Equipos3ActionPerformed
 
     private void btnDevolver_Equipos4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolver_Equipos4ActionPerformed
+        listaEquipos = GestorEquipos.cargarEquipos();
         int fila = tblEquipos_Equipos.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un equipo de la tabla primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
