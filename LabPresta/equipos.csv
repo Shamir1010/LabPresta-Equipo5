@@ -1,9 +1,6 @@
 codigo,tipo,descripcion,estado
-12,Otro,21,Disponible
-15,Proyector,25,Disponible
-51,Laptop,23,Disponible
-2,Laptop,26,Disponible
-6,Kit Arduino,0,Disponible
-60,Laptop,30,En mantenimiento
-1,Otro,30,Disponible
-13,Laptop,lenovo,Disponible
+LAP-01,Laptop,Dell Latitude 5420 i5,Prestado
+LAP-02,Laptop,HP ProBook 450 G8,Disponible
+PROY-01,Proyector,Epson PowerLite X49,Disponible
+ARD-01,Kit Arduino,Kit Arduino Uno R3 con sensores,En mantenimiento
+OTR-01,Otro,Multimetro Digital Fluke,Disponible
