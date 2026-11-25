@@ -118,8 +118,8 @@ public class PanelUsuarios extends JPanel {
         if (cedula.isEmpty()) {
             errores.append("- El campo 'Cédula' está vacío.\n");
         } else {
-            if (!cedula.matches("\\d+")) {
-                errores.append("- La cédula solo puede contener números.\n");
+            if (!cedula.matches("\\d{10}")) {
+                errores.append("- La cédula debe tener exactamente 10 dígitos numéricos.\n");
             }
             for (Usuario u : listaUsuarios) {
                 if (u.getCedula().equals(cedula)) {
@@ -141,8 +141,16 @@ public class PanelUsuarios extends JPanel {
 
         if (telefono.isEmpty()) {
             errores.append("- El campo 'Teléfono' está vacío.\n");
-        } else if (!telefono.matches("\\d+")) {
-            errores.append("- El teléfono solo puede contener números.\n");
+        } else {
+            if (!telefono.matches("\\d{10}")) {
+                errores.append("- El teléfono debe tener exactamente 10 dígitos numéricos.\n");
+            }
+            for (Usuario u : listaUsuarios) {
+                if (u.getTelefono().equals(telefono)) {
+                    errores.append("- El teléfono '").append(telefono).append("' ya está registrado.\n");
+                    break;
+                }
+            }
         }
 
         return errores.toString();

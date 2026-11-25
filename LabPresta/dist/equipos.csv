@@ -1,6 +1,12 @@
 codigo,tipo,descripcion,estado
 LAP-01,Laptop,Dell Latitude 5420 i5,Disponible
-LAP-02,Laptop,HP ProBook 450 G8,Disponible
-PROY-01,Proyector,Epson PowerLite X49,Prestado
+LAP-02,Laptop,HP ProBook 450 G8,Prestado
+PROY-01,Proyector,Epson PowerLite X49,Disponible
 ARD-01,Kit Arduino,Kit Arduino Uno R3 con sensores,En mantenimiento
 OTR-01,Otro,Multimetro Digital Fluke,Disponible
+LAP-03,Laptop,Lenovo ThinkPad E14 i5,En mantenimiento
+LAP-04,Laptop,Asus VivoBook 15 Ryzen 5,En mantenimiento
+PROY-02,Proyector,BenQ MS550 SVGA,Prestado
+ARD-02,Kit Arduino,Kit Arduino Mega 2560,Disponible
+OTR-02,Otro,Osciloscopio Digital Rigol,En mantenimiento
+OTR-03,Otro,Fuente de Poder Regulable 30V,Disponible

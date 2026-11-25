@@ -171,12 +171,23 @@ public class PanelPrestamos extends JPanel {
         }
         if (idxEquipo <= 0) {
             errores.append("- Debe seleccionar un equipo.\n");
+        } else {
+            Equipo equipoSeleccionado = listaEquipos.get(idxEquipo - 1);
+            if (!"Disponible".equalsIgnoreCase(equipoSeleccionado.getEstado())) {
+                errores.append("- El equipo '").append(equipoSeleccionado.getCodigo())
+                       .append("' no está Disponible (estado actual: ")
+                       .append(equipoSeleccionado.getEstado()).append(").\n");
+            }
         }
         if (fechaStr.isEmpty()) {
             errores.append("- El campo 'Fecha préstamo' está vacío.\n");
         } else {
             try {
                 fechaPrestamo = LocalDate.parse(fechaStr);
+                if (fechaPrestamo.isBefore(LocalDate.now())) {
+                    errores.append("- La fecha de préstamo no puede ser anterior a hoy (")
+                           .append(LocalDate.now()).append(").\n");
+                }
             } catch (DateTimeParseException ex) {
                 errores.append("- La fecha de préstamo debe tener formato AAAA-MM-DD.\n");
             }
@@ -190,13 +201,6 @@ public class PanelPrestamos extends JPanel {
         }
 
         Equipo equipoSeleccionado = listaEquipos.get(idxEquipo - 1);
-        if (!"Disponible".equalsIgnoreCase(equipoSeleccionado.getEstado())) {
-            JOptionPane.showMessageDialog(this,
-                    "El equipo '" + equipoSeleccionado.getCodigo() + "' no está Disponible (estado actual: " + equipoSeleccionado.getEstado() + ").",
-                    "Equipo no disponible", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         Usuario usuarioSeleccionado = listaUsuarios.get(idxUsuario - 1);
         Prestamo nuevo = new Prestamo(
                 equipoSeleccionado.getCodigo(),

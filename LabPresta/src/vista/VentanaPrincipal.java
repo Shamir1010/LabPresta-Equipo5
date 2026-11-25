@@ -1,10 +1,17 @@
 package vista;
 
 import datos.GestorEquipos;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
-import modelo.Equipo;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import modelo.Equipo;
 
 
 public class VentanaPrincipal extends javax.swing.JFrame {
@@ -19,6 +26,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
+        organizarPanelEquipos();
         jTabbedPane1.setComponentAt(1, new PanelUsuarios());
         PanelPrestamos panelPrestamos = new PanelPrestamos(() -> {
             listaEquipos = GestorEquipos.cargarEquipos();
@@ -52,6 +60,45 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 eq.getEstado()
             });
         }
+    }
+    
+    private void organizarPanelEquipos() {
+        Equipos_1.removeAll();
+        Equipos_1.setLayout(new BorderLayout(10, 10));
+        Equipos_1.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
+        JPanel panelForm = new JPanel(new GridBagLayout());
+        panelForm.setOpaque(false);
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(6, 10, 6, 10);
+        c.anchor = GridBagConstraints.WEST;
+
+        txtCodigo_Equipos2.setColumns(15);
+        txtDescripcion_Equipos2.setColumns(15);
+
+        c.gridy = 0; c.gridx = 0; panelForm.add(txtCodigo_Equipos, c);
+        c.gridx = 1; panelForm.add(txtCodigo_Equipos2, c);
+
+        c.gridy = 1; c.gridx = 0; panelForm.add(txtTipo_Equipos, c);
+        c.gridx = 1; panelForm.add(cmbTipo_Equipos2, c);
+
+        c.gridy = 2; c.gridx = 0; panelForm.add(txtDescripcion_Equipos, c);
+        c.gridx = 1; panelForm.add(txtDescripcion_Equipos2, c);
+
+        c.gridy = 3; c.gridx = 0; c.gridwidth = 2;
+        panelForm.add(btnRegistrar_Equipos, c);
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setOpaque(false);
+        panelBotones.add(btnMarcar_Equipos3);
+        panelBotones.add(btnDevolver_Equipos4);
+
+        Equipos_1.add(panelForm, BorderLayout.NORTH);
+        Equipos_1.add(jScrollPane1, BorderLayout.CENTER);
+        Equipos_1.add(panelBotones, BorderLayout.SOUTH);
+
+        Equipos_1.revalidate();
+        Equipos_1.repaint();
     }
 
     /**
@@ -223,17 +270,38 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btnRegistrar_EquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrar_EquiposActionPerformed
         listaEquipos = GestorEquipos.cargarEquipos();
-        String codigo = txtCodigo_Equipos2.getText().trim();
+        String codigo = txtCodigo_Equipos2.getText().trim().toUpperCase();
         String tipo = cmbTipo_Equipos2.getSelectedItem().toString();
         String descripcion = txtDescripcion_Equipos2.getText().trim();
 
         StringBuilder errores = new StringBuilder();
+        
+        String prefijoEsperado;
+        switch (tipo) {
+            case "Laptop":
+                prefijoEsperado = "LAP-";
+                break;
+            case "Proyector":
+                prefijoEsperado = "PROY-";
+                break;
+            case "Kit Arduino":
+                prefijoEsperado = "ARD-";
+                break;
+            default:
+                prefijoEsperado = "OTR-";
+                break;
+        }
 
         if (codigo.isEmpty()) {
             errores.append("- El campo 'Código' está vacío.\n");
         } else {
-            if (codigo.contains(",")) {
-                errores.append("- El campo 'Código' no puede contener comas (,).\n");
+            if (!codigo.matches("[A-Z]{2,5}-\\d{2,3}")) {
+                errores.append("- El código debe seguir el formato LETRAS-NÚMEROS (ej. ")
+                       .append(prefijoEsperado).append("01).\n");
+            } else if (!codigo.startsWith(prefijoEsperado)) {
+                errores.append("- Para el tipo '").append(tipo)
+                       .append("', el código debe iniciar con '").append(prefijoEsperado)
+                       .append("' (ej. ").append(prefijoEsperado).append("01).\n");
             }
             for (Equipo eq : listaEquipos) {
                 if (eq.getCodigo().equalsIgnoreCase(codigo)) {
@@ -282,10 +350,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se puede enviar a mantenimiento un equipo que está Prestado.", "Acción no permitida", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (eq.getEstado().equals("En mantenimiento")) {
+            JOptionPane.showMessageDialog(this, "El equipo '" + eq.getCodigo() + "' ya se encuentra En mantenimiento.", "Sin cambios", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
 
         eq.setEstado("En mantenimiento");
         GestorEquipos.guardarEquipos(listaEquipos);
         actualizarTablaEquipos();
+        JOptionPane.showMessageDialog(this, "El equipo '" + eq.getCodigo() + "' cambió a estado En mantenimiento.");
     }//GEN-LAST:event_btnMarcar_Equipos3ActionPerformed
 
     private void btnDevolver_Equipos4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolver_Equipos4ActionPerformed
@@ -301,10 +374,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Este equipo está Prestado. Debe devolverse desde la pestaña de Préstamos.", "Acción no permitida", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (eq.getEstado().equals("Disponible")) {
+            JOptionPane.showMessageDialog(this, "El equipo '" + eq.getCodigo() + "' ya se encuentra Disponible.", "Sin cambios", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
 
         eq.setEstado("Disponible");
         GestorEquipos.guardarEquipos(listaEquipos);
         actualizarTablaEquipos();
+        JOptionPane.showMessageDialog(this, "El equipo '" + eq.getCodigo() + "' volvió a estado Disponible.");
     }//GEN-LAST:event_btnDevolver_Equipos4ActionPerformed
 
     /**
