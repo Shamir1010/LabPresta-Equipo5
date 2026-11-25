@@ -13,23 +13,23 @@ Aplicación de escritorio desarrollada en **Java Swing** (Apache NetBeans) para 
 ## Funcionalidades Implementadas
 
 ### HU-C1: Gestión de Equipos (Pestaña *Equipos*)
-* Registro de equipos con código, tipo (*Laptop, Proyector, Kit Arduino, Otro*) y descripción, asignando estado inicial **Disponible**.
-* Validación de campos vacíos y bloqueo de códigos duplicados.
-* Cambio de estado entre **Disponible** y **En mantenimiento**, impidiendo modificar equipos que estén actualmente en estado **Prestado**.
+- Registro de equipos con código, tipo (*Laptop, Proyector, Kit Arduino, Otro*) y descripción, asignando estado inicial **Disponible**.
+- Validación de campos vacíos, bloqueo de códigos duplicados, conversión automática a mayúsculas y verificación de formato/prefijo según el tipo (`LAP-`, `PROY-`, `ARD-`, `OTR-`).
+- Cambio de estado entre **Disponible** y **En mantenimiento** con mensajes de confirmación, impidiendo modificar equipos en estado **Prestado** o repetir el mismo estado actual.
 
 ### HU-C2: Gestión de Usuarios (Pestaña *Usuarios*)
-* Registro de usuarios con cédula, nombre completo, tipo (*Estudiante* o *Docente*) y teléfono.
-* Validación de campos obligatorios, selección de tipo y bloqueo de cédulas duplicadas.
-* Búsqueda y filtrado en tiempo real por cédula o nombre.
+- Registro de usuarios con cédula, nombre completo, tipo (*Estudiante* o *Docente*) y teléfono.
+- Validación de campos obligatorios, selección de tipo, formato exacto de **10 dígitos numéricos** para cédula y teléfono, y bloqueo de cédulas o teléfonos duplicados.
+- Búsqueda y filtrado en tiempo real por cédula o nombre.
 
 ### HU-C3: Gestión de Préstamos y Devoluciones (Pestaña *Préstamos*)
-* Selección de usuario registrado, equipo y fecha de préstamo editable (`AAAA-MM-DD`).
-* Cálculo automático de la fecha límite según el tipo de usuario: **1 día** para *Estudiante* y **3 días** para *Docente*.
-* Validación que impide prestar equipos que no estén en estado **Disponible** y cambio automático del equipo a **Prestado** al registrar el préstamo.
-* Registro de devoluciones con fecha editable, marcando el préstamo como *Devuelto* (o con atraso si supera la fecha límite) y regresando el equipo a **Disponible**.
+- Selección de usuario registrado, equipo y fecha de préstamo editable (`AAAA-MM-DD`).
+- Cálculo automático de la fecha límite según el tipo de usuario: **1 día** para *Estudiante* y **3 días** para *Docente*.
+- Validación consolidada que impide prestar equipos que no estén **Disponible** o usar fechas anteriores a la actual, cambiando automáticamente el equipo a **Prestado** al registrar el préstamo.
+- Registro de devoluciones con fecha editable, marcando el préstamo como *Devuelto* (o con atraso si supera la fecha límite) y regresando el equipo a **Disponible**.
 
 ## Requisitos para Ejecutar
-* **Java JDK 21 o superior** (proyecto compilado con **JDK 26** en Apache NetBeans).
+- **Java JDK 21 o superior** (proyecto compilado con **JDK 25** en Apache NetBeans).
 
 ## Cómo Ejecutar la Aplicación desde el `.jar` (Recomendado)
 La carpeta `LabPresta/dist` ya incluye el ejecutable compilado (`LabPresta.jar`) junto con los archivos `.csv` de prueba limpios y sincronizados.
